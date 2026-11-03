@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+  Document citation style.
+-->
+<cite:citation xmlns="http://www.w3.org/1999/xhtml" xmlns:cite="http://eprints.org/ep3/citation" xmlns:epc="http://eprints.org/ep3/control">
+
+      <div class="dk_single_image">
+        <epc:choose>
+          <epc:when test="$item.property('formatdesc')">
+            <img class="mdc-image-list__image" src="{$item.url()}" alt="{$item.property('formatdesc')}"/>
+          </epc:when>
+          <epc:otherwise>
+            <img class="mdc-image-list__image" src="{$item.url()}" alt="{$item.property('mime_type')}"/>
+          </epc:otherwise>
+        </epc:choose>
+      </div>
+
+</cite:citation>

@@ -1,0 +1,141 @@
+<?xml version="1.0"?>
+<cite:citation xmlns="http://www.w3.org/1999/xhtml" xmlns:epc="http://eprints.org/ep3/control" xmlns:cite="http://eprints.org/ep3/citation">
+  <epc:set name="docs" expr="$item.documents()">
+    <epc:choose>
+      <epc:when test="length($docs) gt 0">
+        <epc:foreach expr="$docs" iterator="doc">
+
+          <epc:if test="$doc.property('mime_type') = 'application/pdf' and $doc.property('security') = 'public'">
+            <div class="mdc-dialog thing" id="dialog-view-{$doc.property('pos')}">
+              <div class="mdc-dialog__container">
+                <div class="mdc-dialog__surface eprints-summary-doc--dialog" role="alertdialog" aria-modal="true" tabindex="-1">
+                  <div class="mdc-dialog__content" id="dialog-view-{$doc.property('pos')}-content">
+                    <embed src="{$doc.url()}" style="width: 100%; height: 100%" type="application/pdf"/>
+                  </div>
+                  <div class="mdc-dialog__actions">
+                    <epc:when test="security = 'public'">
+                      <a href="{$doc.url()}" download="{$doc.property('main')}">
+                        <mwc-button id="eprints-item--download--{$doc.property('docid')}" icon="download" aria-describedby="tooltip-download--{$doc.property('docid')}">
+                          <span class="eprints-item--button-text">Download</span>
+                        </mwc-button>
+                      </a>
+                      <div id="tooltip-download--{$doc.property('docid')}" class="mdc-tooltip" role="tooltip" aria-hidden="true">
+                        <div class="mdc-tooltip__surface mdc-tooltip__surface-animation">Download this file</div>
+                      </div>
+                     </epc:when>
+                    <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="cancel">
+                      <div class="mdc-button__ripple"/>
+                      <span class="mdc-button__label">Close</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="mdc-dialog__scrim"/>
+            </div>
+          </epc:if>
+
+          <epc:if test="$doc.property('mime_type').one_of( 'image/jpeg', 'image/png', 'image/gif', 'image/webp' ) and $doc.property('security') = 'public'">
+            <div class="mdc-dialog thing" id="dialog-view-{$doc.property('pos')}">
+              <div class="mdc-dialog__container">
+                <div class="mdc-dialog__surface" role="alertdialog" aria-modal="true" tabindex="-1" style="max-width: 1200px !important">
+                  <div class="mdc-dialog__content" id="dialog-view-{$doc.property('pos')}-content">
+                    <epc:if test="$doc.property('mime_type') = 'image/jpeg'">
+                      <embed src="{$doc.url()}" style = "max-height: 40vmax;" type="image/jpeg"/>
+                    </epc:if>
+                    <epc:if test="$doc.property('mime_type') = 'image/png'">
+                      <embed src="{$doc.url()}" style="max-height: 40vmax" type="image/png"/>
+                    </epc:if>
+                    <epc:if test="$doc.property('mime_type') = 'image/gif'">
+                      <embed src="{$doc.url()}" style="max-height: 40vmax" type="image/gif"/>
+                    </epc:if>
+                    <epc:if test="$doc.property('mime_type') = 'image/webp'">
+                      <embed src="{$doc.url()}" style="max-height: 40vmax" type="image/webp"/>
+                    </epc:if>
+                  </div>
+                  <div class="mdc-dialog__actions">
+                    <epc:when test="security = 'public'">
+                      <a href="{$doc.url()}" download="{$doc.property('main')}">
+                        <mwc-button id="eprints-item--download--{$doc.property('docid')}" icon="download" aria-describedby="tooltip-download--{$doc.property('docid')}">
+                          <span class="eprints-item--button-text">Download</span>
+                        </mwc-button>
+                      </a>
+                      <div id="tooltip-download--{$doc.property('docid')}" class="mdc-tooltip" role="tooltip" aria-hidden="true">
+                        <div class="mdc-tooltip__surface mdc-tooltip__surface-animation">Download this file</div>
+                      </div>
+                     </epc:when>
+                    <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="cancel">
+                      <div class="mdc-button__ripple"/>
+                      <span class="mdc-button__label">Close</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="mdc-dialog__scrim"/>
+            </div>
+          </epc:if>
+
+        </epc:foreach>
+        <div class="mdc-layout-grid eprints-item--documents" style="margin:0">
+        <!-- Embed Videos -->
+          <epc:if test="$item.has_type('video') or $item.url_is_video('official_url') or $item.field_has_video('related_url_url')">
+            <epc:print expr="$item.citation('dk_video')"/>
+          </epc:if>
+          <epc:choose>
+            <epc:when test="length($docs) gt 1">
+              <div class="image-list-container">
+                <!--<ul class="mdc-image-list mdc-image-list-masonry masonry-image-list">-->
+                <ul class="mdc-image-list mdc-image-list--masonry masonry-image-list mdc-image-list--with-text-protection">
+                  <epc:foreach expr="$docs" iterator="doc">
+                    <epc:print expr="$doc.citation('tile')"/>
+                  </epc:foreach>
+                </ul>
+              </div>
+            </epc:when>
+            <epc:when test="length($docs) gt 0">
+              <div class="image-list-container">
+                <epc:foreach expr="$docs" iterator="doc">
+                  <epc:choose>
+                    <epc:when test="$doc.property('mime_type').one_of( 'image/jpeg', 'image/png', 'image/gif', 'image/webp' ) and $doc.property('security') = 'public'">
+                      <epc:print expr="$doc.citation('tile_single')"/>
+                    </epc:when>
+                    <epc:otherwise>
+                      <epc:print expr="$doc.citation('tile')"/>
+                    </epc:otherwise>
+                  </epc:choose>
+                </epc:foreach>
+              </div>
+            </epc:when>
+          </epc:choose>
+        </div>
+        <div class="dk-documents-metadata">
+          <h2>Document metadata</h2>
+          <div class="mdc-layout-grid">
+            <epc:foreach expr="$docs" iterator="doc">
+              <epc:print expr="$doc.citation( 'dk_metadata' )"/>
+            </epc:foreach>
+          </div>
+        </div>
+      </epc:when>
+
+      <!-- We might not have documents, but we might have URLs that look like documents we can embed -->
+      <epc:when test="$item.url_is_video('official_url') or $item.field_has_video('related_url_url')">
+        <epc:print expr="$item.citation('dk_video')"/>
+      </epc:when>
+
+      <!-- Nothing to display so make that clear -->
+      <epc:otherwise>
+        <div class="mdc-card no-docs-card">
+          <div class="mdc-card__media">
+            <epc:phrase ref="no_uploads"/>
+          </div>
+          <div class="mdc-card-wrapper__text-section">
+            <div class="mdc-card__title">
+              </div>
+            <div class="mdc-card__subhead">
+              </div>
+          </div>
+        </div>
+      </epc:otherwise>
+    </epc:choose>
+  </epc:set>
+</cite:citation>

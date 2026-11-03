@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!--
+  Document citation style.
+-->
+<cite:citation xmlns="http://www.w3.org/1999/xhtml" xmlns:cite="http://eprints.org/ep3/citation" xmlns:epc="http://eprints.org/ep3/control">
+
+  <epc:if test="$item.property('mime_type').one_of( 'application/pdf', 'image/jpeg', 'image/png', 'image/gif', 'image/webp' ) and $item.is_public()">
+    <li class="mdc-image-list__item mdc-image-list--with-text-protection">
+      <div class="mdc-card__primary-action" data-dialog-value="view-{$item.property('pos')}">
+        <epc:choose>
+          <epc:when test="$item.property('mime_type') = 'application/pdf'">
+            <img class="mdc-image-list__image" src="{$item.thumbnail_url('lightbox')}" alt="{$item.property('mime_type')}"/>
+          </epc:when>
+          <epc:when test="$item.property('formatdesc')">
+            <img class="mdc-image-list__image" src="{$item.url()}" alt="{$item.property('formatdesc')}"/>
+          </epc:when>
+          <epc:otherwise>
+            <img class="mdc-image-list__image" src="{$item.url()}" alt="{$item.property('mime_type')}"/>
+          </epc:otherwise>
+        </epc:choose>
+        <div class="mdc-image-list__supporting">
+          <span class="mdc-image-list__label">
+            <epc:choose>
+              <epc:when test="$item.property('formatdesc')">
+                <b><epc:print expr="formatdesc"/></b>
+              </epc:when>
+              <epc:otherwise>
+                <b><epc:print expr="main"/></b>
+              </epc:otherwise>
+            </epc:choose>
+          </span>
+        </div>
+      </div>
+    </li>
+  </epc:if>
+  <epc:if test="$item.property('mime_type').one_of( 'image/heic', 'image/tiff', 'image/avif' ) and $item.is_public()">
+    <li class="mdc-image-list__item mdc-image-list--with-text-protection">
+      <epc:choose>
+        <epc:when test="$item.property('formatdesc')">
+          <img class="mdc-image-list__image" src="{$item.thumbnail_url('lightbox')}" alt="{$item.property('formatdesc')}"/>
+        </epc:when>
+        <epc:otherwise>
+          <img class="mdc-image-list__image" src="{$item.thumbnail_url('lightbox')}" alt="{$item.property('mime_type')}"/>
+        </epc:otherwise>
+      </epc:choose>
+      <div class="mdc-image-list__supporting">
+        <span class="mdc-image-list__label">
+          <b><epc:print expr="main"/></b>
+        </span>
+      </div>
+    </li>
+  </epc:if>
+
+</cite:citation>

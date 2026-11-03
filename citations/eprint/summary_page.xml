@@ -1,0 +1,301 @@
+<?xml version="1.0"?>
+<!-- 
+	Full "abstract page" (or splash page or summary page, depending on your jargon) for an eprint. 
+-->
+<cite:citation xmlns="http://www.w3.org/1999/xhtml" xmlns:epc="http://eprints.org/ep3/control" xmlns:cite="http://eprints.org/ep3/citation">
+	<div class="mdc-layout-grid">
+		<div class="mdc-layout-grid__inner">
+			<epc:choose>
+				<epc:when test="record_display = 'media'">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8 summary_page_main order-1-when-small">
+						<div class="mdc-card squared-mdc-card eprints--citation_card">
+							<div class="mdc-card__primary-action">
+								<div class="mdc-card-wrapper__text-section">
+									<div class="mdc-typography--body eprints--citation">
+										<epc:print expr="$item.citation($config{citation_default}{eprint}{for_summary_page})"/>
+									</div>
+								</div>
+							</div>
+							<div class="mdc-card__actions">
+								<div class="mdc-card__action-buttons">
+									<mwc-button icon="content_copy" class="eprints--copy_button" data-text="{$item.text_citation($config{citation_default}{eprint}{for_share})}">Copy</mwc-button>
+									<mwc-button icon="share" class="eprints-item--share-item" data-text="{$item.text_citation($config{citation_default}{eprint}{for_share})}">Share</mwc-button>
+								</div>
+							</div>
+						</div>
+						<epc:print expr="$item.citation('summary_documents_media')"/>
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4 summary_page_docs order-2-when-small">
+						<epc:if test="abstract">
+							<section>
+								<div class="eprints-item--abstract">
+									<p>
+										<epc:print expr="abstract"/>
+									</p>
+								</div>
+							</section>
+						</epc:if>
+						<section>
+							<div class="mdc-layout-grid remove-when-small summary-page-metadata">
+								<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+									<div class="eprints-item--metadata">
+										<div class="mdc-data-table">
+											<div class="mdc-data-table__table-container">
+												<table class="mdc-data-table__table">
+													<thead>
+														<tr class="mdc-data-table__header-row">
+														</tr>
+													</thead>
+													<tbody class="mdc-data-table__content">
+														<tr class="mdc-data-table__row">
+															<th class="mdc-data-table__header-cell" role="columnheader" scope="row">
+																<epc:phrase ref="eprint_fieldname_type"/>
+															</th>
+															<td class="mdc-data-table__cell">
+																<epc:print expr="type"/>
+																<epc:choose>
+																	<epc:when test="type = 'conference_item'"> (<epc:print expr="pres_type"/>)</epc:when>
+																	<epc:when test="type = 'monograph'">(<epc:print expr="monograph_type"/>)</epc:when>
+																	<epc:when test="type = 'thesis'">(<epc:print expr="thesis_type"/>)</epc:when>
+																</epc:choose>
+															</td>
+														</tr>
+														<epc:foreach expr="$config{summary_page_metadata}" iterator="fieldname">
+															<epc:if test="is_set($item.property($fieldname))">
+																<tr class="mdc-data-table__row">
+																	<th class="mdc-data-table__header-cell" role="columnheader" scope="row">
+																		<epc:phrase ref="eprint_fieldname_{$fieldname}"/>
+																	</th>
+																	<td class="mdc-data-table__cell">
+																		<epc:choose>
+																			<epc:when test="$fieldname = 'isi'">
+																				<a href="http://gateway.webofknowledge.com/gateway/Gateway.cgi?GWVersion=2&amp;SrcAuth=Alerting&amp;SrcApp=Alerting&amp;DestApp=WOS&amp;DestLinkType=FullRecord;UT=WOS:000{$item.property('isi')}">
+																					<epc:print expr="isi"/>
+																				</a>
+																			</epc:when>
+																			<epc:otherwise>
+																				<epc:print expr="$item.property($fieldname)"/>
+																			</epc:otherwise>
+																		</epc:choose>
+																	</td>
+																</tr>
+															</epc:if>
+														</epc:foreach>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+									<br/>
+								</div>
+								<epc:print expr="$item.citation('summary_explore')"/>
+							</div>
+							<div class="mdc-layout-grid__cell remove-when-small mdc-layout-grid__cell--span-12">
+								<epc:print expr="$export_bar"/>
+								<br/>
+								<div class="mdc-card summary-stat-card">
+									<div class="mdc-card__media">
+										<div id="eprint-downloads"/>
+										<script type="text/javascript">
+											google.setOnLoadCallback(function(){
+											var irstats2_summary_page_eprintid = '<epc:print expr="eprintid"/>';
+											console.log(irstats2_summary_page_eprintid);
+											new EPJS_Stats_Counter( { 
+												'context': {
+												'range':'_ALL_',
+												'set_name': 'eprint',
+												'set_value': irstats2_summary_page_eprintid,
+												'datatype':'downloads'
+											},
+											'options': {
+												'container_id': 'eprint-downloads'
+											} 
+											} );
+										});
+										</script>
+									</div>
+									<div class="mdc-card-wrapper__text-section">
+										<div class="mdc-card__title">
+										Downloads
+										</div>
+										<div class="mdc-card__subhead">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="mdc-layout-grid remove-when-small summary-page-stats">
+								<div class="mdc-layout-grid__inner">
+									<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+										<epc:print expr="$item.citation('summary_stats')"/>
+									</div>
+								</div>
+							</div>
+							<div class="mdc-layout-grid mdc-layout-grid__cell--span-12 remove-when-small summary-page_edit_button">
+								<a href="{$config{http_cgiurl}}/users/home?screen=EPrint%3A%3AView&amp;eprintid={eprintid}">
+									<button class="mdc-button mdc-button--touch mdc-button--raised mdc-button--leading" type="button">
+										<span class="mdc-button__ripple"/>
+										<span class="mdc-button__touch"/>
+										<i class="material-icons mdc-button__icon" aria-hidden="true">edit</i>
+										<span class="mdc-button__label">Edit item (staff only)</span>
+									</button>
+								</a>
+								<a href="{$config{http_cgiurl}}/users/home?screen=EPrint%3A%3AREF2029&amp;eprintid={eprintid}" class="logged-in-only">
+									<button class="mdc-button mdc-button--touch mdc-button--raised mdc-button--leading" type="button">
+										<span class="mdc-button__ripple"/>
+										<span class="mdc-button__touch"/>
+										<i class="material-icons mdc-button__icon" aria-hidden="true">edit</i>
+										<span class="mdc-button__label">REF2029 (UoA Leads Only)</span>
+									</button>
+								</a>
+							</div>
+						</section>
+					</div>
+				</epc:when>
+				<epc:otherwise>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8 summary_page_main order-2-when-small">
+						<div class="mdc-card squared-mdc-card eprints--citation_card">
+							<div class="mdc-card__primary-action">
+								<div class="mdc-card-wrapper__text-section">
+									<div class="mdc-typography--body eprints--citation">
+										<epc:print expr="$item.citation($config{citation_default}{eprint}{for_summary_page})"/>
+									</div>
+								</div>
+							</div>
+							<div class="mdc-card__actions">
+								<div class="mdc-card__action-buttons">
+									<mwc-button icon="content_copy" class="eprints--copy_button" data-text="{$item.text_citation($config{citation_default}{eprint}{for_share})}">Copy</mwc-button>
+									<mwc-button icon="share" class="eprints-item--share-item" data-text="{$item.text_citation($config{citation_default}{eprint}{for_share})}">Share</mwc-button>
+								</div>
+							</div>
+						</div>
+						<epc:if test="abstract">
+							<section>
+								<div class="eprints-item--abstract">
+									<p>
+										<epc:print expr="abstract"/>
+									</p>
+								</div>
+							</section>
+						</epc:if>
+						<section>
+							<div class="mdc-layout-grid remove-when-small summary-page-metadata">
+								<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+									<div class="eprints-item--metadata">
+										<div class="mdc-data-table">
+											<div class="mdc-data-table__table-container">
+												<table class="mdc-data-table__table">
+													<thead>
+														<tr class="mdc-data-table__header-row">
+												</tr>
+													</thead>
+													<tbody class="mdc-data-table__content">
+														<tr class="mdc-data-table__row">
+															<th class="mdc-data-table__header-cell" role="columnheader" scope="row">
+																<epc:phrase ref="eprint_fieldname_type"/>
+															</th>
+															<td class="mdc-data-table__cell">
+																<epc:print expr="type"/>
+																<epc:choose>
+																	<epc:when test="type = 'conference_item'"> (<epc:print expr="pres_type"/>)</epc:when>
+																	<epc:when test="type = 'monograph'">(<epc:print expr="monograph_type"/>)</epc:when>
+																	<epc:when test="type = 'thesis'">(<epc:print expr="thesis_type"/>)</epc:when>
+																</epc:choose>
+															</td>
+														</tr>
+														<epc:foreach expr="$config{summary_page_metadata}" iterator="fieldname">
+															<epc:if test="is_set($item.property($fieldname))">
+																<tr class="mdc-data-table__row">
+																	<th class="mdc-data-table__header-cell" role="columnheader" scope="row">
+																		<epc:phrase ref="eprint_fieldname_{$fieldname}"/>
+																	</th>
+																	<td class="mdc-data-table__cell">
+																		<epc:choose>
+																			<epc:when test="$fieldname = 'isi'">
+																				<a href="http://gateway.webofknowledge.com/gateway/Gateway.cgi?GWVersion=2&amp;SrcAuth=Alerting&amp;SrcApp=Alerting&amp;DestApp=WOS&amp;DestLinkType=FullRecord;UT=WOS:000{$item.property('isi')}">
+																					<epc:print expr="isi"/>
+																				</a>
+																			</epc:when>
+																			<epc:otherwise>
+																				<epc:print expr="$item.property($fieldname)"/>
+																			</epc:otherwise>
+																		</epc:choose>
+																	</td>
+																</tr>
+															</epc:if>
+														</epc:foreach>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+									<br/>
+								</div>
+								<epc:print expr="$item.citation('summary_explore')"/>
+							</div>
+						</section>
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4 summary_page_docs order-1-when-small">
+						<epc:print expr="$item.citation('summary_documents')"/>
+						<br/>
+						<div class="mdc-layout-grid__cell remove-when-small mdc-layout-grid__cell--span-12">
+							<epc:print expr="$export_bar"/>
+							<br/>
+							<div class="mdc-card summary-stat-card">
+								<div class="mdc-card__media">
+									<div id="eprint-downloads"/>
+									<script type="text/javascript">
+									google.setOnLoadCallback(function(){
+									var irstats2_summary_page_eprintid = '<epc:print expr="eprintid"/>';
+									console.log(irstats2_summary_page_eprintid);
+									new EPJS_Stats_Counter( { 
+										'context': {
+										'range':'_ALL_',
+										'set_name': 'eprint',
+										'set_value': irstats2_summary_page_eprintid,
+										'datatype':'downloads'
+									},
+									'options': {
+										'container_id': 'eprint-downloads'
+									} 
+									} );
+								});
+								</script>
+								</div>
+								<div class="mdc-card-wrapper__text-section">
+									<div class="mdc-card__title">
+								Downloads
+								</div>
+									<div class="mdc-card__subhead">
+								</div>
+								</div>
+							</div>
+						</div>
+						<div class="mdc-layout-grid remove-when-small summary-page-stats">
+							<div class="mdc-layout-grid__inner">
+								<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+									<epc:print expr="$item.citation('summary_stats')"/>
+								</div>
+							</div>
+						</div>
+						<div class="mdc-layout-grid mdc-layout-grid__cell--span-12 remove-when-small summary-page_edit_button">
+							<a href="{$config{http_cgiurl}}/users/home?screen=EPrint%3A%3AView&amp;eprintid={eprintid}">
+								<button class="mdc-button mdc-button--touch mdc-button--raised mdc-button--leading" type="button">
+									<span class="mdc-button__ripple"/>
+									<span class="mdc-button__touch"/>
+									<i class="material-icons mdc-button__icon" aria-hidden="true">edit</i>
+									<span class="mdc-button__label">Edit item (staff only)</span>
+								</button>
+							</a>
+						</div>
+					</div>
+				</epc:otherwise>
+			</epc:choose>
+		</div>
+	</div>
+	<!-- Tooltips -->
+	<set name="creators" expr="$item.property(&quot;creators&quot;)">
+		<foreach expr="$creators" iterator="creator">
+			<print expr="$creator.citation(&quot;orcid_tooltips&quot;)"/>
+		</foreach>
+	</set>
+</cite:citation>
