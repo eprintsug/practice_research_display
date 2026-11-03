@@ -36,5 +36,5 @@ You'll also need to ensure the summary page
 During development, this plugin was being called DK Display (based on its Dorian and Kultur ancestors) so many of the variables use the code 'dk'. This may be revisited in future depending on how annoying it is to remember that variables differ from the proper ingredient name.
 
 ## Future Enhancements
-- The video display currently uses plyr (as did Dorian), which is deprecated and doesn't work nicely with all file types. In future updating to a supported media viewer that can disaply all (or at least more) file formats.
+- The video display currently uses plyr (as did Dorian), which is deprecated and doesn't work nicely with all file types. In future updating to a supported media viewer that can display all (or at least more) file formats.
 - Related to this, the version of jquery used is very much deprecated. Updating (or removing reliance on) this may be a happy side effect of updating the player but needs doing regardless.
