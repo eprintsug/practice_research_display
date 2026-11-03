@@ -30,7 +30,7 @@ It's recommended to add the following to eprints\_fields\_automatic.pl (with the
       $eprint->set_value( "record_display", "media" )
     }
 ```
-You'll also need to ensure the summary page 
+You'll also need to ensure all citations are in place at the local archive level. This may involve some amount of combining your existing summary_page citation with the one introduced here.
 
 ## Usage Notes
 During development, this plugin was being called DK Display (based on its Dorian and Kultur ancestors) so many of the variables use the code 'dk'. This may be revisited in future depending on how annoying it is to remember that variables differ from the proper ingredient name.
